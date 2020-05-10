@@ -190,7 +190,10 @@ namespace engenious.WinForms
             _updateThread.Start();
             
             
-            ParentWindow.Closing += ParentWindowOnClosing;
+            if (ParentWindow != null)
+                ParentWindow.Closing += ParentWindowOnClosing;
+            else
+                HandleDestroyed += (sender, args) => ParentWindowOnClosing(this, new CancelEventArgs(false));
             _load?.Invoke(this, EventArgs.Empty);
         }
 
