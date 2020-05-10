@@ -18,15 +18,19 @@ namespace engenious.WinForms
         public GameControl()
         {
             CursorVisible = true;
-            
+            UpdateFrequency = 0.0;
+
+
             SetStyle(ControlStyles.UserPaint, true);
             Application.Idle += Application_Idle;
         }
 
+        public double UpdateFrequency { get; set; }
+
         private void Application_Idle(object sender, EventArgs e)
         {
             var elapsed = _stopwatch.ElapsedMilliseconds / 1000.0;
-            if (elapsed <= 0.0)
+            if (elapsed <= UpdateFrequency)
                 return;
 
             _stopwatch.Restart();
