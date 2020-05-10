@@ -3,7 +3,7 @@
 
 #CUSTOM FILES
 *.ego
-engenious.Nuget.props
+engenious.WinForms.Nuget.props
 Properties/AssemblyInfo.cs
 
 # User-specific files

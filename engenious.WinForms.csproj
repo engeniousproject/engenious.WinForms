@@ -8,8 +8,12 @@
         <Description>engenious graphics framework core assembly, similar to XNA/MonoGame.</Description>
 
         <DocumentationFile>$(BaseIntermediateOutputPath)/engenious.xml</DocumentationFile>
+
+		<NuspecProperties>configuration=$(Configuration);framework=$(TargetFramework)</NuspecProperties>
     </PropertyGroup>
     <ItemGroup>
+        <LitGitTemplateReference Include="engenious.WinForms.Nuget.props.template" />
+
         <ProjectReference Include="..\engenious\engenious.csproj" Condition="Exists('..\engenious\engenious.csproj')" />
         <PackageReference Include="engenious" Version="0.3.0.33-alpha" Condition="!Exists('..\engenious\engenious.csproj')" />
 
@@ -19,4 +23,5 @@
     <ItemGroup>
       <Reference Include="System.Windows.Forms" />
     </ItemGroup>
+    <Import Project="engenious.WinForms.Nuget.props" Condition="Exists('engenious.WinForms.Nuget.props')" />
 </Project>
