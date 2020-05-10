@@ -11,7 +11,7 @@ using MouseEventArgs = System.Windows.Forms.MouseEventArgs;
 
 namespace engenious.WinForms
 {
-    public class GameControl : Control, IRenderingSurface
+    public class GameControl : UserControl, IRenderingSurface
     {
         private readonly Thread _updateThread;
         /// <inheritdoc />
@@ -20,19 +20,23 @@ namespace engenious.WinForms
             CursorVisible = true;
             
             SetStyle(ControlStyles.UserPaint, true);
-            _updateThread = new Thread(UpdateLoop);
+            Application.Idle += Application_Idle;
+        }
+
+        private void Application_Idle(object sender, EventArgs e)
+        {
+            var elapsed = _stopwatch.ElapsedMilliseconds / 1000.0;
+            if (elapsed <= 0.0)
+                return;
+
+            _stopwatch.Restart();
+            // TODO: better render handling
+            _updateFrame?.Invoke(this, new FrameEventArgs(elapsed));
+            _renderFrame?.Invoke(this, new FrameEventArgs(elapsed));
         }
 
         private Stopwatch _stopwatch = new Stopwatch();
-        void UpdateLoop()
-        {
-            while (IsHandleCreated)
-            {
-                _stopwatch.Restart();
-                Invalidate();
-                Thread.Sleep(20);
-            }
-        }
+
         /// <inheritdoc />
         public Point PointToScreen(Point pt) => base.PointToScreen(new System.Drawing.Point(pt.X, pt.Y));
 
@@ -99,12 +103,7 @@ namespace engenious.WinForms
         /// <inheritdoc />
         protected override void OnPaintBackground(PaintEventArgs pevent)
         {
-            var elapsed = _stopwatch.ElapsedMilliseconds / 1000.0;
-            if (elapsed <= 0.0)
-                return;
-            // TODO: better render handling
-            _updateFrame?.Invoke(this, new FrameEventArgs(elapsed));
-            _renderFrame?.Invoke(this, new FrameEventArgs(elapsed));
+
 
         }
 
@@ -187,7 +186,6 @@ namespace engenious.WinForms
         protected override void OnHandleCreated(EventArgs e)
         {
             base.OnHandleCreated(e);
-            _updateThread.Start();
             
             
             if (ParentWindow != null)
@@ -195,6 +193,8 @@ namespace engenious.WinForms
             else
                 HandleDestroyed += (sender, args) => ParentWindowOnClosing(this, new CancelEventArgs(false));
             _load?.Invoke(this, EventArgs.Empty);
+
+            _stopwatch.Start();
         }
 
         private event EventHandler<KeyPressEventArgs> _keyPress;
