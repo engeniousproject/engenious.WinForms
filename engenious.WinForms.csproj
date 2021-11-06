@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
-        <TargetFramework>net461</TargetFramework>
+        <TargetFramework>net5.0-windows</TargetFramework>
         <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+		<UseWindowsForms>true</UseWindowsForms>
 
         <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
         <Description>engenious graphics framework core assembly, similar to XNA/MonoGame.</Description>
@@ -19,9 +20,6 @@
 
         <PackageReference Include="engenious.OpenTK" Version="3.0.1-pre" PrivateAssets="compile" />
         <PackageReference Include="LitGit" Version="0.2.0.55-alpha" PrivateAssets="all" />
-    </ItemGroup>
-    <ItemGroup>
-      <Reference Include="System.Windows.Forms" />
     </ItemGroup>
     <Import Project="engenious.WinForms.Nuget.props" Condition="Exists('engenious.WinForms.Nuget.props')" />
 </Project>
